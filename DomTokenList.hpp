@@ -41,7 +41,7 @@ public:
     void add(std::vector<std::string> tokens)
     {
         modify(tokens, ops::add);
-        length = tokens.size();
+        length = tokenList.size();
     }
     /**
      * @brief Remove the tokens from the list of tokens
@@ -51,7 +51,7 @@ public:
     void remove(std::vector<std::string> tokens)
     {
         modify(tokens, ops::remove);
-        length = tokens.size();
+        length = tokenList.size();
     }
     /**
      * @brief Change the token provided either present or absent 
@@ -97,7 +97,7 @@ public:
         }
         if (this->contains(old_token)) {
             auto it = std::find(tokenList.begin(), tokenList.end(), old_token);
-            int index = std::distance(tokenList.begin(), tokenList.end(), old_token);
+            int index = std::distance(tokenList.begin(), it);
             tokenList[index] = new_token;
             return true;
         } else {
@@ -125,13 +125,13 @@ private:
             throw DOMException("SyntaxError");
         }
         for (auto t : tokens) {
-            if (t.find(" ") == std::string::npos) {
+            if (t.find(" ") != std::string::npos) {
                 throw DOMException("InvalidCharacterError");
             }
             if (sign == ops::add)
                 tokenList.push_back(t);
             else if (sign == ops::remove) {
-                std::remove(tokenList.begin(), tokenList.end(), t);
+               std::remove(tokenList.begin(), tokenList.end(), t);
             }
         }
     }
